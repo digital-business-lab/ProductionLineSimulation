@@ -172,3 +172,8 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Node-Red
+nodered-data/*
+!nodered-data/flows.json
+!nodered-data/package.json
