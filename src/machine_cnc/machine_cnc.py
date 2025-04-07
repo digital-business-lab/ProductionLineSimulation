@@ -3,17 +3,20 @@ import json
 import random
 import threading
 
+import psycopg2
 from flask import Flask
-from kafka import KafkaProducer
+# from kafka import KafkaProducer
 
 
 app = Flask(__name__)
 
 running = False
 
-producer = KafkaProducer(bootstrap_servers=["kafka:9092"])
-topic = "machine-cnc-data"
+# producer = KafkaProducer(bootstrap_servers=["kafka:9092"])
+# topic = "machine-cnc-data"
 
+conn = psycopg2.connect("postgres://user:password@postgres:5432/mydb")
+cursor = conn.cursor()
 
 def data_cnc_machine(obj_id: int) -> dict:
     """Simulates machine output"""
@@ -33,11 +36,22 @@ def run_machine() -> None:
     while running:
         data = data_cnc_machine(obj_id=obj_id)
         print(f"Created data: {data}")
-        producer.send(
-            topic=topic,
-            value=json.dumps(data).encode("utf-8")
-            )
-        print("Kafka sent data")
+
+        # Send to kafka -> Not used yet
+        # producer.send(
+        #     topic=topic,
+        #     value=json.dumps(data).encode("utf-8")
+        #     )
+        # print("Kafka sent data")
+
+        # Send to postgres
+        cursor.execute(
+            "INSERT INTO machine_cnc (machine_id, obj_id, tool_temperature, spindle_speed, time_stamp) VALUES (%s, %s, %s, %s, %s)",
+            (data["machine_id"], data["obj_id"], data["tool_temperature (C)"], data["spindle_speed (RPM)"], data["time_stamp"])
+        )
+        conn.commit()
+
+        obj_id += 1
         
 @app.route("/start_machine_cnc", methods=["POST"])
 def start_machine_cnc():

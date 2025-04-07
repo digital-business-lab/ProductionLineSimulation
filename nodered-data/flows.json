@@ -7,25 +7,6 @@
         "info": ""
     },
     {
-        "id": "40053005fd17cb7f",
-        "type": "ui_tab",
-        "name": "Home",
-        "icon": "dashboard",
-        "disabled": false,
-        "hidden": false
-    },
-    {
-        "id": "bd88458f7e0f5e85",
-        "type": "ui_group",
-        "name": "Machine-CNC-Controls",
-        "tab": "40053005fd17cb7f",
-        "order": 1,
-        "disp": true,
-        "width": 6,
-        "collapse": false,
-        "className": ""
-    },
-    {
         "id": "474f7c14ac03f04e",
         "type": "ui_base",
         "theme": {
@@ -120,6 +101,25 @@
                 "py": 0
             }
         }
+    },
+    {
+        "id": "40053005fd17cb7f",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "bd88458f7e0f5e85",
+        "type": "ui_group",
+        "name": "Machine-CNC-Controls",
+        "tab": "40053005fd17cb7f",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
     },
     {
         "id": "9bd1c31bce8ef794",
