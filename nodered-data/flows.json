@@ -122,6 +122,17 @@
         "className": ""
     },
     {
+        "id": "0fc13a9ad0ca641c",
+        "type": "ui_group",
+        "name": "Machine-Assembly-Robot-Controls",
+        "tab": "40053005fd17cb7f",
+        "order": 2,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
         "id": "9bd1c31bce8ef794",
         "type": "http request",
         "z": "f6f2187d.f17ca8",
@@ -129,7 +140,7 @@
         "method": "POST",
         "ret": "txt",
         "paytoqs": "ignore",
-        "url": "http://machine:5000/start_machine_cnc",
+        "url": "http://machine_cnc:5000/start_machine_cnc",
         "tls": "",
         "persist": false,
         "proxy": "",
@@ -151,7 +162,7 @@
         "method": "POST",
         "ret": "txt",
         "paytoqs": "ignore",
-        "url": "http://machine:5000/stop_machine_cnc",
+        "url": "http://machine_cnc:5000/stop_machine_cnc",
         "tls": "",
         "persist": false,
         "proxy": "",
@@ -175,7 +186,7 @@
         "width": 0,
         "height": 0,
         "passthru": false,
-        "label": "Start Machine",
+        "label": "Start Machine CNC",
         "tooltip": "",
         "color": "",
         "bgcolor": "",
@@ -185,7 +196,7 @@
         "payloadType": "str",
         "topic": "topic",
         "topicType": "msg",
-        "x": 320,
+        "x": 330,
         "y": 360,
         "wires": [
             [
@@ -203,7 +214,7 @@
         "width": 0,
         "height": 0,
         "passthru": false,
-        "label": "Stop Machine",
+        "label": "Stop Machine CNC",
         "tooltip": "",
         "color": "",
         "bgcolor": "",
@@ -213,12 +224,112 @@
         "payloadType": "str",
         "topic": "topic",
         "topicType": "msg",
-        "x": 320,
+        "x": 330,
         "y": 440,
         "wires": [
             [
                 "d25b06dc9a52b5b1"
             ]
+        ]
+    },
+    {
+        "id": "71d065d0d1ea9da2",
+        "type": "ui_button",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "group": "0fc13a9ad0ca641c",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Start Machine Assembly Robot",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 310,
+        "y": 140,
+        "wires": [
+            [
+                "dbd52e6d60fd50ab"
+            ]
+        ]
+    },
+    {
+        "id": "3688b86ff08fd830",
+        "type": "ui_button",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "group": "0fc13a9ad0ca641c",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Stop Machine Assembly Robot",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 310,
+        "y": 220,
+        "wires": [
+            [
+                "92fded12bd45d96b"
+            ]
+        ]
+    },
+    {
+        "id": "dbd52e6d60fd50ab",
+        "type": "http request",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://machine_assembly_robot:5001/start_machine_assembly_robot",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 590,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "92fded12bd45d96b",
+        "type": "http request",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://machine_assembly_robot:5001/stop_machine_assembly_robot",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 590,
+        "y": 220,
+        "wires": [
+            []
         ]
     }
 ]

@@ -25,7 +25,7 @@ services:
   #   ports:
   #     - "9092:9092"
 
-  machine:
+  machine_cnc:
     build: ./src/machine_cnc
     depends_on:
       # - kafka
@@ -34,6 +34,13 @@ services:
     #   KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     # networks:
     #   - kafka-net
+    restart: on-failure
+
+  machine_assembly_robot:
+    build: ./src/machine_assembly_robot
+    depends_on:
+      - postgres
+      - machine_cnc
     restart: on-failure
 
   nodered:
