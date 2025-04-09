@@ -5,7 +5,7 @@ import threading
 
 import psycopg2
 from flask import Flask
-# from kafka import KafkaProducer
+# from kafka import KafkaProducer, KafkaConsumer
 
 
 app = Flask(__name__)
