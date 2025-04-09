@@ -5,15 +5,15 @@ import threading
 
 import psycopg2
 from flask import Flask
-# from kafka import KafkaProducer, KafkaConsumer
+from kafka import KafkaProducer
 
 
 app = Flask(__name__)
 
 running = False
 
-# producer = KafkaProducer(bootstrap_servers=["kafka:9092"])
-# topic = "machine-cnc-data"
+producer = KafkaProducer(bootstrap_servers=["kafka:9092"])
+topic = "machine-cnc-data"
 
 conn = psycopg2.connect("postgres://user:password@postgres:5432/mydb")
 cursor = conn.cursor()
@@ -38,11 +38,11 @@ def run_machine() -> None:
         print(f"Created data: {data}")
 
         # Send to kafka -> Not used yet
-        # producer.send(
-        #     topic=topic,
-        #     value=json.dumps(data).encode("utf-8")
-        #     )
-        # print("Kafka sent data")
+        producer.send(
+            topic=topic,
+            value=json.dumps(data).encode("utf-8")
+            )
+        print("Kafka sent data")
 
         # Send to postgres
         cursor.execute(

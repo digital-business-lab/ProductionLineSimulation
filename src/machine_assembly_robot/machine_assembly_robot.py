@@ -1,17 +1,25 @@
+import json
 import time
 import random
 import threading
 
 import psycopg2
 from flask import Flask
+from kafka import KafkaConsumer
 
 
 app = Flask(__name__)
 
 running = False
 
-# producer = KafkaProducer(bootstrap_servers=["kafka:9092"])
-# topic = "machine-cnc-data"
+consumer = KafkaConsumer(
+    "machine-cnc-data",
+    bootstrap_servers=["kafka:9092"],
+    value_deserializer=lambda m: json.loads(m.decode('utf-8')),
+    auto_offset_reset='earliest',  # or 'latest' depending on your need
+    enable_auto_commit=True,
+    group_id="machine2-group"
+)
 
 conn = psycopg2.connect("postgres://user:password@postgres:5432/mydb")
 cursor = conn.cursor()
@@ -30,27 +38,23 @@ def data_assembly_robot(obj_id: int) -> dict:
 
 def run_machine() -> None:
     global running
-    obj_id = 0
 
     while running:
-        data = data_assembly_robot(obj_id=obj_id)
-        print(f"Created data: {data}")
+        for message in consumer:
+            data = message.value
+            obj_id = data.get("obj_id")  # Replace with your actual key
+            if obj_id:
+                print(f"Received obj_id: {obj_id}")
 
-        # Send to kafka -> Not used yet
-        # producer.send(
-        #     topic=topic,
-        #     value=json.dumps(data).encode("utf-8")
-        #     )
-        # print("Kafka sent data")
+                data = data_assembly_robot(obj_id=obj_id)
+                print(f"Created data: {data}")
 
-        # Send to postgres
-        cursor.execute(
-            "INSERT INTO machine_assembly_robot (machine_id, obj_id, speed_of_movement, load_weight, time_stamp) VALUES (%s, %s, %s, %s, %s)",
-            (data["machine_id"], data["obj_id"], data["speed_of_movement (m/s)"], data["load_weight (kg)"], data["time_stamp"])
-        )
-        conn.commit()
-
-        obj_id += 1
+                # Send to postgres
+                cursor.execute(
+                    "INSERT INTO machine_assembly_robot (machine_id, obj_id, speed_of_movement, load_weight, time_stamp) VALUES (%s, %s, %s, %s, %s)",
+                    (data["machine_id"], data["obj_id"], data["speed_of_movement (m/s)"], data["load_weight (kg)"], data["time_stamp"])
+                )
+                conn.commit()
 
 @app.route("/start_machine_assembly_robot", methods=["POST"])
 def start_machine_cnc():
