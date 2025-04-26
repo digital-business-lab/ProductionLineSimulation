@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3'
 
 services:
   zookeeper:
@@ -21,33 +21,51 @@ services:
     ports:
       - "9092:9092"
 
+  frontend:
+    build: ./frontend
+    ports:
+      - "5000:5000"
+    depends_on:
+      - machine_cnc
+      - machine_assembly_robot
+
+
   machine_cnc:
-    build: ./src/machine_cnc
+    build: ./backend/machine_cnc
     depends_on:
       - kafka
       - postgres
+    ports:
+      - "5001:5001"
     environment:
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     restart: on-failure
+
 
   machine_assembly_robot:
-    build: ./src/machine_assembly_robot
+    build: ./backend/machine_assembly_robot
     depends_on:
+      - kafka
       - postgres
       - machine_cnc
-      - kafka
+    ports:
+      - "5002:5002"
     environment:
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     restart: on-failure
 
-  nodered:
-    image: nodered/node-red
-    ports:
-      - "1880:1880"
+  machine_packaging:
+    build: ./backend/machine_packaging
     depends_on:
       - kafka
-    volumes:
-      - ./nodered-data:/data
+      - postgres
+      - machine_cnc
+      - machine_assembly_robot
+    ports:
+      - "5003:5003"
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    restart: on-failure
 
   postgres:
     image: postgres
@@ -77,6 +95,5 @@ services:
       - ./grafana/provisioning:/etc/grafana/provisioning
 
 volumes:
-  nodered_data:
   postgres-data:
   grafana-storage:

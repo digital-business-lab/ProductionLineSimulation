@@ -16,3 +16,12 @@ CREATE TABLE IF NOT EXISTS machine_assembly_robot (
     time_stamp DOUBLE PRECISION
 );
 
+CREATE TABLE IF NOT EXISTS machine_packaging (
+    id SERIAL PRIMARY KEY,
+    machine_id INT,
+    obj_id INT,
+    package_weight FLOAT,
+    packaging_material FLOAT,
+    time_stamp DOUBLE PRECISION
+);
+

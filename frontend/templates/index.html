@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/home.css') }}">
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+
+    <title>Production Line Simulation</title>
+</head>
+<body>
+    <main class="Grid-Container-Main">
+        <div class="grid-item">
+            1
+        </div>
+
+        <div class="grid-item">
+            2
+        </div>
+
+        <div class="grid-item">
+            3
+        </div>
+
+        <div class="grid-item">
+            4
+        </div>
+
+        <div class="grid-item database">
+            <h1>PostgresDB</h1>
+        </div>
+
+        <div class="grid-item">
+            6
+        </div>
+
+        <div class="grid-item machine" data-machine="cnc">
+            <h1>Machine CNC</h1>
+            <input type="text" placeholder="Tool Temperature (C)">
+            <input type="text" placeholder="Spindle Speed (RPM)">
+            <button class="start" onclick="control('cnc', 'start')">Start</button>
+            <button class="stop" onclick="control('cnc', 'stop')">Stop</button>
+        </div>
+
+        <div class="grid-item machine" data-machine="assembly_robot">
+            <h1>Machine Assembly Robot</h1>
+            <input type="text" placeholder="Speed of Movement (m/s)">
+            <input type="text" placeholder="Load Weight (kg)">
+            <button class="start" onclick="control('assembly_robot', 'start')">Start</button>
+            <button class="stop" onclick="control('assembly_robot', 'stop')">Stop</button>
+          </div>
+          
+        <div class="grid-item machine" data-machine="packaging">
+            <h1>Machine Packaging</h1>
+            <input type="text" placeholder="Package Weight (kg)">
+            <input type="text" placeholder="Packaging Material">
+            <button class="start" onclick="control('packaging', 'start')">Start</button>
+            <button class="stop" onclick="control('packaging', 'stop')">Stop</button>
+        </div>
+
+    </main>
+
+    <script>
+        async function control(machine, action) {
+            const el = document.querySelector(`[data-machine="${machine}"]`);
+            const inputs = el.querySelectorAll('input');
+
+            const data = {};
+            inputs.forEach((input, i) => {
+                data[`param${i + 1}`] = input.value;
+            });
+
+            const res = await fetch(`/${action}/${machine}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            const text = await res.text();
+            document.getElementById('result').innerText = text;
+        }
+    </script>
+    <script>
+        const socket = io();
+      
+        socket.on('machine_activity', (data) => {
+            const machine = data.machine;
+            const el = document.querySelector(`[data-machine="${machine}"]`);
+            if (el) {
+                el.classList.add('blink');
+                setTimeout(() => el.classList.remove('blink'), 1000);
+            }
+        });
+      </script>      
+</body>
+</html>
