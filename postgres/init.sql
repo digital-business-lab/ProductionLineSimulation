@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS machine_cnc (
     obj_id INT,
     tool_temperature FLOAT,
     spindle_speed INT,
+    quality_prediction VARCHAR(20),
     time_stamp DOUBLE PRECISION
 );
 
@@ -13,6 +14,7 @@ CREATE TABLE IF NOT EXISTS machine_assembly_robot (
     obj_id INT,
     speed_of_movement FLOAT,
     load_weight FLOAT,
+    quality_prediction VARCHAR(20),
     time_stamp DOUBLE PRECISION
 );
 
@@ -22,6 +24,7 @@ CREATE TABLE IF NOT EXISTS machine_packaging (
     obj_id INT,
     package_weight FLOAT,
     packaging_material FLOAT,
+    quality_prediction VARCHAR(20),
     time_stamp DOUBLE PRECISION
 );
 

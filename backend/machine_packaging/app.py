@@ -12,6 +12,9 @@ app = Flask(__name__)
 running = False
 params = {}
 
+producer = KafkaProducer(bootstrap_servers=["kafka:9092"])
+topic_model = "decision-tree-packaging"
+
 conn = psycopg2.connect("postgres://user:password@postgres:5432/mydb")
 cursor = conn.cursor()
 
@@ -33,7 +36,8 @@ def task(params):
         bootstrap_servers=["kafka:9092"],
         value_deserializer=lambda m: json.loads(m.decode('utf-8')),
         auto_offset_reset='earliest',
-        enable_auto_commit=True
+        enable_auto_commit=True,
+        group_id="machine-ass-robot-consumer-group"
     )
 
     while running:
@@ -55,20 +59,19 @@ def task(params):
                     )
                 print(f"Running task Packaging... with data: {data}", flush=True)
 
-                # Send to kafka
-                # producer.send(
-                #     topic=topic,
-                #     value=json.dumps(data).encode("utf-8")
-                # )
-                # print(f"Sent data to kafka topic: {topic}", flush=True)
-
                 # Send to postgres
                 cursor.execute(
-                    "INSERT INTO machine_packaging (machine_id, obj_id, package_weight, packaging_material, time_stamp) VALUES (%s, %s, %s, %s, %s)",
-                    (data["machine_id"], data["obj_id"], data["package_weight (kg)"], data["packaging_material"], data["time_stamp"])
+                    "INSERT INTO machine_packaging (machine_id, obj_id, package_weight, packaging_material, time_stamp, quality_prediction) VALUES (%s, %s, %s, %s, %s, %s)",
+                    (data["machine_id"], data["obj_id"], data["package_weight (kg)"], data["packaging_material"], data["time_stamp"], "No Prediction")
                 )
                 conn.commit()
                 print("Sent data to postgres", flush=True)
+
+                # Send to data to kafka for decision tree layer
+                producer.send(
+                    topic=topic_model,
+                    value=json.dumps(data).encode("utf-8")
+                )
 
                 # Notify frontend that machine produced a part
                 requests.post("http://frontend:5000/notify/packaging")

@@ -13,7 +13,8 @@ running = False
 params = {}
 
 producer = KafkaProducer(bootstrap_servers=["kafka:9092"])
-topic = "machine-assrobot-data"
+topic_machine = "machine-assrobot-data"
+topic_model = "decision-tree-assembly-robot"
 
 conn = psycopg2.connect("postgres://user:password@postgres:5432/mydb")
 cursor = conn.cursor()
@@ -37,6 +38,7 @@ def task(params):
         value_deserializer=lambda m: json.loads(m.decode('utf-8')),
         auto_offset_reset='earliest',
         enable_auto_commit=True,
+        group_id="machine-cnc-consumer-group"
     )
 
     while running:
@@ -60,18 +62,24 @@ def task(params):
 
                 # Send to kafka
                 producer.send(
-                    topic=topic,
+                    topic=topic_machine,
                     value=json.dumps(data).encode("utf-8")
                 )
-                print(f"Sent data to kafka topic: {topic}", flush=True)
+                print(f"Sent data to kafka topic: {topic_machine}", flush=True)
 
                 # Send to postgres
                 cursor.execute(
-                    "INSERT INTO machine_assembly_robot (machine_id, obj_id, speed_of_movement, load_weight, time_stamp) VALUES (%s, %s, %s, %s, %s)",
-                    (data["machine_id"], data["obj_id"], data["speed_of_movement (m/s)"], data["load_weight (kg)"], data["time_stamp"])
+                    "INSERT INTO machine_assembly_robot (machine_id, obj_id, speed_of_movement, load_weight, time_stamp, quality_prediction) VALUES (%s, %s, %s, %s, %s, %s)",
+                    (data["machine_id"], data["obj_id"], data["speed_of_movement (m/s)"], data["load_weight (kg)"], data["time_stamp"], "No Prediction")
                 )
                 conn.commit()
                 print("Sent data to postgres", flush=True)
+
+                # Send to data to kafka for decision tree layer
+                producer.send(
+                    topic=topic_model,
+                    value=json.dumps(data).encode("utf-8")
+                )
 
                 # Notify frontend that machine produced a part
                 requests.post("http://frontend:5000/notify/assembly_robot")

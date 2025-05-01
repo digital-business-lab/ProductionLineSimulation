@@ -12,8 +12,10 @@ app = Flask(__name__)
 running = False
 params = {}
 
+# Producer for Machine Assembly Robot
 producer = KafkaProducer(bootstrap_servers=["kafka:9092"])
-topic = "machine-cnc-data"
+topic_machine = "machine-cnc-data"
+topic_model = "decision-tree-cnc"
 
 conn = psycopg2.connect("postgres://user:password@postgres:5432/mydb")
 cursor = conn.cursor()
@@ -42,20 +44,26 @@ def task(params):
         )
         print(f"Running task CNC... with data: {data}", flush=True)
 
-        # Send to kafka
+        # Send to kafka for machine assembly robot
         producer.send(
-            topic=topic,
+            topic=topic_machine,
             value=json.dumps(data).encode("utf-8")
         )
-        print(f"Sent data to kafka topic: {topic}", flush=True)
+        print(f"Sent data to kafka topic: {topic_machine}", flush=True)
 
         # Send to postgres
         cursor.execute(
-            "INSERT INTO machine_cnc (machine_id, obj_id, tool_temperature, spindle_speed, time_stamp) VALUES (%s, %s, %s, %s, %s)",
-            (data["machine_id"], data["obj_id"], data["tool_temperature (C)"], data["spindle_speed (RPM)"], data["time_stamp"])
+            "INSERT INTO machine_cnc (machine_id, obj_id, tool_temperature, spindle_speed, time_stamp, quality_prediction) VALUES (%s, %s, %s, %s, %s, %s)",
+            (data["machine_id"], data["obj_id"], data["tool_temperature (C)"], data["spindle_speed (RPM)"], data["time_stamp"], "No Prediction")
         )
         conn.commit()
         print("Sent data to postgres", flush=True)
+
+        # Send to data to kafka for decision tree layer
+        producer.send(
+            topic=topic_model,
+            value=json.dumps(data).encode("utf-8")
+        )
 
         # Notify frontend that machine produced a part
         requests.post("http://frontend:5000/notify/cnc")
