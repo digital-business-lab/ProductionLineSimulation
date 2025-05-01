@@ -1,4 +1,7 @@
 """ 
+File holds the service for the decision tree layer
+Makes predictions and updates the database entries
+
 Labels that the decision tree outputs for quality_prediction:
     - Good
     - Average
@@ -6,6 +9,9 @@ Labels that the decision tree outputs for quality_prediction:
 
 Standard value for quality_prediction:
     - No prediction
+
+File is written in pylint standard
+author: Lukas Graf
 """
 
 import json
@@ -31,6 +37,14 @@ def prediction() -> str:
     return random.choice(["Good", "Average", "Bad"])
 
 def consume_messages() -> None:
+    """ 
+    Gets messages from defined topics, makes a prediction on the
+    sent features and updates the datatable entry
+
+    Returns
+    -------
+        None
+    """
     consumer = KafkaConsumer(
         *topics,
         bootstrap_servers=["kafka:9092"],
@@ -39,11 +53,12 @@ def consume_messages() -> None:
         enable_auto_commit=True,
         group_id="model-consumer-group"
     )
-    
+
     for message in  consumer:
-        """Get machine id to decide what model to use 
-        If decision tree or random forest we maybe only
-        need 1 model (Random Forest | Decision Tree)"""
+        # Get machine id to decide what model to use 
+        # If decision tree or random forest we maybe only
+        # need 1 model (Random Forest | Decision Tree)
+
         data = message.value
         machine_id = data.get("machine_id")
         print(f"Machine id: {machine_id} and data: {data}",flush=True)
@@ -71,7 +86,7 @@ def consume_messages() -> None:
             print(f"Updated table machine_cnc for obj {obj_id} with prediction {prediction_model}]")
 
             # Notify frontend that a prediction was made
-            requests.post("http://frontend:5000/notify/decision_tree")
+            requests.post("http://frontend:5000/notify/decision_tree", timeout=10)
 
         elif machine_id == 1002:
             # Start prediction process for Assembly Robot
@@ -94,10 +109,11 @@ def consume_messages() -> None:
                 (prediction_model, obj_id, time_stamp)
             )
             conn.commit()
-            print(f"Updated table machine_assembly_robot for obj {obj_id} with prediction {prediction_model}]")
+            print(f"""Updated table machine_assembly_robot for obj {obj_id}
+                  with prediction {prediction_model}""")
 
             # Notify frontend that a prediction was made
-            requests.post("http://frontend:5000/notify/decision_tree")
+            requests.post("http://frontend:5000/notify/decision_tree", timeout=10)
 
         elif machine_id == 1003:
             # Start prediction process for Packaging
@@ -120,10 +136,11 @@ def consume_messages() -> None:
                 (prediction_model, obj_id, time_stamp)
             )
             conn.commit()
-            print(f"Updated table machine_assembly_robot for obj {obj_id} with prediction {prediction_model}]")
+            print(f"""Updated table machine_assembly_robot for obj
+                  {obj_id} with prediction {prediction_model}""")
 
             # Notify frontend that a prediction was made
-            requests.post("http://frontend:5000/notify/decision_tree")
+            requests.post("http://frontend:5000/notify/decision_tree", timeout=10)
 
         else:
             print(f"Machine ID: '{machine_id}' unknown -> Message not consumed.")

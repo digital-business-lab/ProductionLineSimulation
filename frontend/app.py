@@ -1,6 +1,13 @@
-from flask import Flask, render_template, request
+""" 
+File dealing with all the frontend function
+File written in pylint standard
+
+author: Lukas Graf
+"""
+
 import requests
 from flask_socketio import SocketIO
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
@@ -11,15 +18,42 @@ MACHINE_PACKAGING = 'http://machine_packaging:5003'
 
 @app.route('/')
 def index():
+    """Renders standard template for frontend"""
     return render_template('index.html')
 
 @app.route('/notify/<machine>', methods=['POST'])
 def notify(machine):
+    """
+    Function that writes to socketio when it get called
+    Used to make container blink when sending data
+
+    Parameters
+    ----------
+        machine
+            -> The machine which sends data
+
+    Returns
+    -------
+        Any
+    """
     socketio.emit('machine_activity', {'machine': machine})
     return "Notification sent", 200
 
 @app.route('/start/<machine>', methods=['POST'])
-def start_machine(machine):
+def start_machine(machine: str) -> str:
+    """ 
+    Makes backend call to desired machine when corresponding start
+    button is pressed in the frontend
+
+    Parameters
+    ----------
+        machine : str
+            -> The machine which is called
+
+    Returns
+    -------
+        str
+    """
     if machine == "cnc":
         target = MACHINE_CNC
     elif machine == "assembly_robot":
@@ -30,11 +64,24 @@ def start_machine(machine):
         raise ValueError(f"No endpoint for {machine}")
 
     data = request.get_json()
-    r = requests.post(f'{target}/start', json=data)
+    r = requests.post(f'{target}/start', json=data, timeout=10)
     return r.text
 
 @app.route('/stop/<machine>', methods=['POST'])
-def stop_machine(machine):
+def stop_machine(machine) -> str:
+    """ 
+    Makes backend call to desired machine when corresponding stop
+    button is pressed in the frontend
+
+    Parameters
+    ----------
+        machine : str
+            -> The machine which is called
+
+    Returns
+    -------
+        str
+    """
     if machine == "cnc":
         target = MACHINE_CNC
     elif machine == "assembly_robot":
@@ -44,7 +91,7 @@ def stop_machine(machine):
     else:
         raise ValueError(f"No endpoint for {machine}")
 
-    r = requests.post(f'{target}/stop')
+    r = requests.post(f'{target}/stop', timeout=10)
     return r.text
 
 if __name__ == '__main__':
