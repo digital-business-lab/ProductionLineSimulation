@@ -91,7 +91,7 @@ def task(params: dict) -> None:
         )
 
         # Notify frontend that machine produced a part
-        requests.post("http://frontend:5000/notify/cnc", timeout=10)
+        # requests.post("http://frontend:5000/notify/cnc", timeout=10)
 
         obj_id += 1
 

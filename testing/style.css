@@ -14,7 +14,34 @@ p {
     color: #666;
 }
 
+#connection-arrows {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.animated-line {
+  stroke: black;
+  stroke-width: 2;
+  stroke-dasharray: 6, 6;
+  stroke-linecap: round;
+  animation: dashFlow 1s linear infinite;
+  marker-end: url(#arrowhead);
+}
+
+@keyframes dashFlow {
+  to {
+    stroke-dashoffset: -12;
+  }
+}
+
+
 .Grid-Container-Main{
+    position: relative;
     background-color: aliceblue;
     display: grid;
     grid-template-rows: repeat(3, 1fr);
@@ -64,6 +91,16 @@ p {
     justify-content: center;
     border: solid;
 }
+.Quality-Check ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    list-style: none;
+    justify-content: center;
+    font-size: 18px;
+    color: #333;
+}
 
 .Database {
     display: flex;
@@ -72,10 +109,23 @@ p {
     border-radius: 99999px;
 }
 
+.ML-Flow,
 .Model-Structure {
     display: grid;
-    grid-template-columns: 0.9fr 0.1fr;
+    grid-template-columns: 0.8fr 0.2fr;
     border: solid;
+}
+
+.ML-Flow-Label,
+.Model-Structure-Label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ML-Flow-Graphs,
+.Model-Structure-Parameters {
+    padding: 3%;
 }
 
 .Packaging-Line {
@@ -93,6 +143,8 @@ p {
     gap: 1%;
 }
 
+.ML-Flow-Graphs button,
+.Model-Structure-Parameters button,
 .Test-Check button,
 .Database-Table-View button {
     width: 100%;
@@ -109,6 +161,8 @@ p {
     font-size: 16px;
 }
 
+.ML-Flow button:hover
+.Model-Structure-Parameters button:hover,
 .Test-Check button:hover,
 .Database-Table-View button:hover {
     background-color: #5a6268;
@@ -191,26 +245,12 @@ p {
     gap: 2%;
 }
 
-.circle-red {
-    border: solid;
-    width: 30px;
-    height: 30px;
-    background-color: #ff6b6b;
-    border-radius: 50%;
-}
-
-.circle-yellow {
-    border: solid;
-    width: 30px;
-    height: 30px;
-    background-color: #ffe66d;
-    border-radius: 50%;
-}
-
+.circle-red,
+.circle-yellow,
 .circle-green {
     border: solid;
     width: 30px;
     height: 30px;
-    background-color: #51cf66;
     border-radius: 50%;
 }
+

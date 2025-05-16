@@ -107,7 +107,7 @@ def task(params: dict) -> None:
                 )
 
                 # Notify frontend that machine produced a part
-                requests.post("http://frontend:5000/notify/assembly_robot", timeout=10)
+                # requests.post("http://frontend:5000/notify/assembly_robot", timeout=10)
 
     consumer.close()
 

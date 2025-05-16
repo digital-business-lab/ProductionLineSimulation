@@ -71,19 +71,6 @@ services:
     restart: on-failure
 
 
-  decision_tree_layer:
-    build: ./backend/decision_tree_layer
-    depends_on:
-      - kafka
-      - postgres
-      - machine_cnc
-      - machine_assembly_robot
-      - machine_packaging
-    environment:
-      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-    restart: on-failure
-
-
   postgres:
     image: postgres
     restart: always

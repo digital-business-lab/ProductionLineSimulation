@@ -1,0 +1,143 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.Grid-Container-Main{
+    background-color: aliceblue;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 0.5fr 1fr 0.5fr 1fr;
+    height: 100vh;
+    width: 100vw;
+    gap: 20px;
+    padding: 20px;
+}
+
+.grid-item{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #4CAF50; /* Green background */
+    color: white;
+    font-size: 24px;
+    border: 2px dashed black;
+    height: 100%;
+}
+
+.grid-item.transparent {
+    background-color: transparent;
+    border: none;
+}
+
+.neural-network {
+    grid-column: span 3;
+    background-color: #f4f4f4;
+    border-radius: 9999px;
+    font-weight: bold;
+    color: #333;
+    border: 2px dashed black;
+}
+
+.neural-network h1 {
+    font-size: 24px;
+    text-align: center;
+}
+
+.decision-tree {
+    grid-column: span 3;
+    background-color: #f4f4f4;
+    border-radius: 9999px;
+    font-weight: bold;
+    color: #333;
+    border: 2px dashed black;
+}
+
+.decision-tree h1 {
+    font-size: 24px;
+    text-align: center;
+}
+
+.database {
+    flex-direction: column;
+    background-color: #f4f4f4;
+    color: #333;
+    border: 2px dashed black;
+}
+
+.database h1 {
+    font-size: 24px;
+    text-align: center;
+}
+
+.machine {
+    flex-direction: column;
+    background-color: #f4f4f4;
+    color: #333;
+    padding: 30px;
+    border: 2px dashed black;
+}
+
+.machine h1 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.machine input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.machine button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.machine .start {
+    background-color: #28a745;
+    color: white;
+}
+
+.machine .stop {
+    background-color: #dc3545;
+    color: white;
+}
+
+.machine .start:hover {
+    background-color: #218838;
+}
+
+.machine .stop:hover {
+    background-color: #c82333;
+}
+
+.blink {
+    border: 3px solid green;
+    animation: border-blink 1s ease-in-out 1;
+}
+
+@keyframes border-blink {
+    0% {
+        border-color: green;
+    }
+    50% {
+        border-color: transparent;
+    }
+    100% {
+        border-color: green;
+    }
+}
+
+  
+  

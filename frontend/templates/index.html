@@ -4,89 +4,131 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/home.css') }}">
-    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-
     <title>Production Line Simulation</title>
 </head>
 <body>
     <main class="Grid-Container-Main">
-        <div class="grid-item neural-network" data-machine="neural_network">
-            <h1> Final Neural Network</h1>
+        <svg id="connection-arrows"></svg>
+
+        <div class="KI-Layer">
+            <div class="Layer-Name">
+                KI Layer
+            </div>
+            <div class="Model-Structure">
+                <div class="Model-Structure-Label">
+                    <h1>Model Structure</h1>
+                </div>
+                <div class="Model-Structure-Parameters">
+                    <button type="button">Params</button>
+                </div>
+            </div>
+            <div class="ML-Flow">
+                <div class="ML-Flow-Label">
+                    <h1>ML Flow</h1>
+                </div>
+                <div class="ML-Flow-Graphs">
+                    <button type="button">Graphs</button>
+                </div>
+            </div>
+            <div class="Quality-Check">
+                <ul>
+                    <li>OBJ-ID: XYZ</li>
+                    <li>Machines: 1/3</li>
+                    <li>Quality: GOOD</li>
+                </ul>
+            </div>
+            <div class="Test-Check">
+                <button type="button">3/5</button>
+            </div>
+
+        </div>
+        
+        <div class="Data-Layer">
+            <div class="Layer-Name">
+                Data Layer
+            </div>
+            <div class="Database">
+                <h1>Influx DB</h1>
+            </div>
+            <div class="Database-Table-View">
+                <button type="button">Table View</button>
+            </div>
         </div>
 
-        <div class="grid-item transparent">
-            4
-        </div>
-
-        <div class="grid-item database">
-            <h1>PostgresDB</h1>
-        </div>
-
-        <div class="grid-item transparent">
-            6
-        </div>
-
-        <div class="grid-item decision-tree" data-machine="decision_tree">
-            <h1>Decision Tree Layer</h1>
-        </div>
-
-        <div class="grid-item machine" data-machine="cnc">
-            <h1>Machine CNC</h1>
-            <input type="text" placeholder="Tool Temperature (C)">
-            <input type="text" placeholder="Spindle Speed (RPM)">
-            <button class="start" onclick="control('cnc', 'start')">Start</button>
-            <button class="stop" onclick="control('cnc', 'stop')">Stop</button>
-        </div>
-
-        <div class="grid-item machine" data-machine="assembly_robot">
-            <h1>Machine Assembly Robot</h1>
-            <input type="text" placeholder="Speed of Movement (m/s)">
-            <input type="text" placeholder="Load Weight (kg)">
-            <button class="start" onclick="control('assembly_robot', 'start')">Start</button>
-            <button class="stop" onclick="control('assembly_robot', 'stop')">Stop</button>
-          </div>
-          
-        <div class="grid-item machine" data-machine="packaging">
-            <h1>Machine Packaging</h1>
-            <input type="text" placeholder="Package Weight (kg)">
-            <input type="text" placeholder="Packaging Material">
-            <button class="start" onclick="control('packaging', 'start')">Start</button>
-            <button class="stop" onclick="control('packaging', 'stop')">Stop</button>
+        <div class="Machine-Layer">
+            <div class="Layer-Name">
+                Machine Layer
+            </div>
+            <div class="Packaging-Line" data-machine="cnc">
+                <div class="Machine">
+                    <div class="ampel" data-id="cnc">
+                        <div class="circle-red" data-color="red"></div>
+                        <div class="circle-yellow" data-color="yellow"></div>
+                        <div class="circle-green" data-color="green"></div>
+                    </div>
+                    <div class="Params">
+                        <h1>CNC</h1>
+                        <p>ID: 1001</p>
+                        <input type="text" placeholder="Tool Temperature (C)">
+                        <input type="text" placeholder="Spindle Speed (RPM)">
+                        <div class="button-group">
+                            <button class="start" onclick="setAmpelState('start', 'cnc'); control('cnc', 'start')">Start</button>
+                            <button class="stop" onclick="setAmpelState('stop', 'cnc'); control('cnc', 'stop')">Stop</button>
+                        </div>
+                    </div>
+                    <div class="Machine-Statistics">
+                        <button class="Machine-Statistics-Button">Stats</button>
+                    </div>
+                </div>
+                <div class="Machine" data-machine="assembly_robot">
+                    <div class="ampel" data-id="ar">
+                        <div class="circle-red" data-color="red"></div>
+                        <div class="circle-yellow" data-color="yellow"></div>
+                        <div class="circle-green" data-color="green"></div>
+                    </div>
+                    <div class="Params">
+                        <h1>Assembly Robot</h1>
+                        <p>ID: 1002</p>
+                        <input type="text" placeholder="Speed of Movement (m/s)">
+                        <input type="text" placeholder="Load Weight (kg)">
+                        <div class="button-group">
+                            <button class="start" onclick="setAmpelState('start', 'ar'); control('assembly_robot', 'start')">Start</button>
+                            <button class="stop" onclick="setAmpelState('stop', 'ar'); control('assembly_robot', 'stop')">Stop</button>
+                        </div>
+                    </div>
+                    <div class="Machine-Statistics">
+                        <button class="Machine-Statistics-Button">Stats</button>
+                    </div>
+                </div>
+                <div class="Machine" data-machine="packaging">
+                    <div class="ampel" data-id="pack">
+                        <div class="circle-red" data-color="red"></div>
+                        <div class="circle-yellow" data-color="yellow"></div>
+                        <div class="circle-green" data-color="green"></div>
+                    </div>
+                    <div class="Params">
+                        <h1>Packaging</h1>
+                        <p>ID: 1003</p>
+                        <input type="text" placeholder="Package Weight (kg)">
+                        <input type="text" placeholder="Packaging Material">
+                        <div class="button-group">
+                            <button class="start" onclick="setAmpelState('start', 'pack'); control('packaging', 'start')">Start</button>
+                            <button class="stop" onclick="setAmpelState('stop', 'pack'); control('packaging', 'stop')">Stop</button>
+                        </div>
+                    </div>
+                    <div class="Machine-Statistics">
+                        <button class="Machine-Statistics-Button">Stats</button>
+                    </div>
+                </div>
+            </div>
+            <div class="Test-Check">
+                <button type="button">3/5</button>
+            </div>
         </div>
 
     </main>
 
-    <script>
-        async function control(machine, action) {
-            const el = document.querySelector(`[data-machine="${machine}"]`);
-            const inputs = el.querySelectorAll('input');
-
-            const data = {};
-            inputs.forEach((input, i) => {
-                data[`param${i + 1}`] = input.value;
-            });
-
-            const res = await fetch(`/${action}/${machine}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-
-            const text = await res.text();
-            document.getElementById('result').innerText = text;
-        }
-    </script>
-    <script>
-        const socket = io();
-      
-        socket.on('machine_activity', (data) => {
-            const machine = data.machine;
-            const el = document.querySelector(`[data-machine="${machine}"]`);
-            if (el) {
-                el.classList.add('blink');
-                setTimeout(() => el.classList.remove('blink'), 1000);
-            }
-        });
-      </script>      
+    <script src="{{ url_for('static', filename='scripts/script.js') }}"></script>
+  
 </body>
 </html>

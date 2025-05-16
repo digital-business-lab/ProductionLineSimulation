@@ -8,21 +8,34 @@
 </head>
 <body>
     <main class="Grid-Container-Main">
+        <svg id="connection-arrows"></svg>
+
         <div class="KI-Layer">
             <div class="Layer-Name">
                 KI Layer
             </div>
             <div class="Model-Structure">
-                <div>Model-Structure</div>
-                <div>Params</div>
+                <div class="Model-Structure-Label">
+                    <h1>Model Structure</h1>
+                </div>
+                <div class="Model-Structure-Parameters">
+                    <button type="button">Params</button>
+                </div>
             </div>
             <div class="ML-Flow">
-                ML-Flow
+                <div class="ML-Flow-Label">
+                    <h1>ML Flow</h1>
+                </div>
+                <div class="ML-Flow-Graphs">
+                    <button type="button">Graphs</button>
+                </div>
             </div>
             <div class="Quality-Check">
-                <li>OBJ-ID: XYZ</li>
-                <li>Machines: 1/3</li>
-                <li>Quality: GOOD</li>
+                <ul>
+                    <li>OBJ-ID: XYZ</li>
+                    <li>Machines: 1/3</li>
+                    <li>Quality: GOOD</li>
+                </ul>
             </div>
             <div class="Test-Check">
                 <button type="button">3/5</button>
@@ -46,12 +59,12 @@
             <div class="Layer-Name">
                 Machine Layer
             </div>
-            <div class="Packaging-Line">
+            <div class="Packaging-Line" data-machine="cnc">
                 <div class="Machine">
-                    <div class="ampel">
-                        <div class="circle-red"></div>
-                        <div class="circle-yellow"></div>
-                        <div class="circle-green"></div>
+                    <div class="ampel" data-id="cnc">
+                        <div class="circle-red" data-color="red"></div>
+                        <div class="circle-yellow" data-color="yellow"></div>
+                        <div class="circle-green" data-color="green"></div>
                     </div>
                     <div class="Params">
                         <h1>CNC</h1>
@@ -59,19 +72,19 @@
                         <input type="text" placeholder="Tool Temperature (C)">
                         <input type="text" placeholder="Spindle Speed (RPM)">
                         <div class="button-group">
-                            <button class="start" onclick="control('cnc', 'start')">Start</button>
-                            <button class="stop" onclick="control('cnc', 'stop')">Stop</button>
+                            <button class="start" onclick="setAmpelState('start', 'cnc'); control('cnc', 'start')">Start</button>
+                            <button class="stop" onclick="setAmpelState('stop', 'cnc'); control('cnc', 'stop')">Stop</button>
                         </div>
                     </div>
                     <div class="Machine-Statistics">
                         <button class="Machine-Statistics-Button">Stats</button>
                     </div>
                 </div>
-                <div class="Machine">
-                    <div class="ampel">
-                        <div class="circle-red"></div>
-                        <div class="circle-yellow"></div>
-                        <div class="circle-green"></div>
+                <div class="Machine" data-machine="assembly_robot">
+                    <div class="ampel" data-id="ar">
+                        <div class="circle-red" data-color="red"></div>
+                        <div class="circle-yellow" data-color="yellow"></div>
+                        <div class="circle-green" data-color="green"></div>
                     </div>
                     <div class="Params">
                         <h1>Assembly Robot</h1>
@@ -79,19 +92,19 @@
                         <input type="text" placeholder="Speed of Movement (m/s)">
                         <input type="text" placeholder="Load Weight (kg)">
                         <div class="button-group">
-                            <button class="start" onclick="control('assembly_robot', 'start')">Start</button>
-                            <button class="stop" onclick="control('assembly_robot', 'stop')">Stop</button>
+                            <button class="start" onclick="setAmpelState('start', 'ar'); control('assembly_robot', 'start')">Start</button>
+                            <button class="stop" onclick="setAmpelState('stop', 'ar'); control('assembly_robot', 'stop')">Stop</button>
                         </div>
                     </div>
                     <div class="Machine-Statistics">
                         <button class="Machine-Statistics-Button">Stats</button>
                     </div>
                 </div>
-                <div class="Machine">
-                    <div class="ampel">
-                        <div class="circle-red"></div>
-                        <div class="circle-yellow"></div>
-                        <div class="circle-green"></div>
+                <div class="Machine" data-machine="packaging">
+                    <div class="ampel" data-id="pack">
+                        <div class="circle-red" data-color="red"></div>
+                        <div class="circle-yellow" data-color="yellow"></div>
+                        <div class="circle-green" data-color="green"></div>
                     </div>
                     <div class="Params">
                         <h1>Packaging</h1>
@@ -99,8 +112,8 @@
                         <input type="text" placeholder="Package Weight (kg)">
                         <input type="text" placeholder="Packaging Material">
                         <div class="button-group">
-                            <button class="start" onclick="control('packaging', 'start')">Start</button>
-                            <button class="stop" onclick="control('packaging', 'stop')">Stop</button>
+                            <button class="start" onclick="setAmpelState('start', 'pack'); control('packaging', 'start')">Start</button>
+                            <button class="stop" onclick="setAmpelState('stop', 'pack'); control('packaging', 'stop')">Stop</button>
                         </div>
                     </div>
                     <div class="Machine-Statistics">
@@ -114,6 +127,8 @@
         </div>
 
     </main>
-    
+
+    <script src="script.js"></script>
+  
 </body>
 </html>
