@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Live Factory Stats</title>
+    <title>Machine Statistics</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
 </head>
@@ -10,20 +10,20 @@
     <main class="Main-Container">
         <section class="Main-Container-CNC">
             <h1>CNC Statistics</h1>
-            <canvas id="cncChart1"></canvas>
-            <canvas id="cncChart2"></canvas>
+            <canvas id="machine_cncChart1"></canvas>
+            <canvas id="machine_cncChart2"></canvas>
         </section>
 
         <section class="Main-Container-AR">
             <h1>Assembly Robot Statistics</h1>
-            <canvas id="arChart1"></canvas>
-            <canvas id="arChart2"></canvas>
+            <canvas id="machine_assembly_robotChart1"></canvas>
+            <canvas id="machine_assembly_robotChart2"></canvas>
         </section>
 
         <section class="Main-Container-Packaging">
             <h1>Packaging Statistics</h1>
-            <canvas id="packChart1"></canvas>
-            <canvas id="packChart2"></canvas>
+            <canvas id="machine_packagingChart1"></canvas>
+            <canvas id="machine_packagingChart2"></canvas>
         </section>
     </main>
 

@@ -51,7 +51,7 @@
                 <h1>Influx DB</h1>
             </div>
             <div class="Database-Table-View">
-                <button type="button" onclick="openInNewWindow()">Table View</button>
+                <button type="button" onclick="openInNewWindow('http://localhost:3000/d/postgres-demo/postgres-table-view')">Table View</button>
             </div>
         </div>
 
@@ -77,7 +77,7 @@
                         </div>
                     </div>
                     <div class="Machine-Statistics">
-                        <button class="Machine-Statistics-Button">Stats</button>
+                        <button class="Machine-Statistics-Button" onclick="openInNewWindow('http://localhost:5050')">Stats</button>
                     </div>
                 </div>
                 <div class="Machine" data-machine="assembly_robot">
@@ -97,7 +97,7 @@
                         </div>
                     </div>
                     <div class="Machine-Statistics">
-                        <button class="Machine-Statistics-Button">Stats</button>
+                        <button class="Machine-Statistics-Button" onclick="openInNewWindow('http://localhost:5050')">Stats</button>
                     </div>
                 </div>
                 <div class="Machine" data-machine="packaging">
@@ -117,7 +117,7 @@
                         </div>
                     </div>
                     <div class="Machine-Statistics">
-                        <button class="Machine-Statistics-Button">Stats</button>
+                        <button class="Machine-Statistics-Button" onclick="openInNewWindow('http://localhost:5050')">Stats</button>
                     </div>
                 </div>
             </div>

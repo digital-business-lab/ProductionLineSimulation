@@ -1,4 +1,9 @@
-const sections = ["cnc", "ar", "pack"];
+const sections = ["machine_cnc", "machine_assembly_robot", "machine_packaging"];
+const metrics = {
+    "machine_cnc" : ["Tool Temperature", "Spindle Speed"],
+    "machine_assembly_robot" : ["Speed of Movement", "Load Weight"],
+    "machine_packaging" : ["Package Weight", "Packaging Material"]
+}
 const charts = {};
 
 async function fetchAndRender(section) {
@@ -16,7 +21,7 @@ async function fetchAndRender(section) {
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: `${section.toUpperCase()} Metric 1`,
+                        label: `${metrics[section][0]}`,
                         data: data1,
                         borderColor: 'blue',
                         borderWidth: 2,
@@ -27,8 +32,12 @@ async function fetchAndRender(section) {
                     animation: false,
                     scales: {
                         x: {
+                            title: {
+                                display: true,
+                                text: 'Timestamp'
+                            },
                             ticks: {
-                                display: false  // Hide x-axis timestamps
+                                display: false  // Hides individual timestamps
                             }
                         }
                     }
@@ -39,7 +48,7 @@ async function fetchAndRender(section) {
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: `${section.toUpperCase()} Metric 2`,
+                        label: `${metrics[section][1]}`,
                         data: data2,
                         borderColor: 'green',
                         borderWidth: 2,
@@ -50,8 +59,12 @@ async function fetchAndRender(section) {
                     animation: false,
                     scales: {
                         x: {
+                            title: {
+                                display: true,
+                                text: 'Timestamp'
+                            },
                             ticks: {
-                                display: false  // Hide x-axis timestamps
+                                display: false
                             }
                         }
                     }
@@ -72,7 +85,7 @@ async function fetchAndRender(section) {
 function startUpdating() {
     sections.forEach(section => {
         fetchAndRender(section);
-        setInterval(() => fetchAndRender(section), 30000);
+        setInterval(() => fetchAndRender(section), 5000);
     });
 }
 

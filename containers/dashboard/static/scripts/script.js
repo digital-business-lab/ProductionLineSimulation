@@ -21,8 +21,8 @@ function setAmpelState(state, id) {
 }
 
 //Function for Table View button that opens grafana in new Tab
-function openInNewWindow() {
-    const url = "http://localhost:3000/d/postgres-demo/postgres-table-view";
+function openInNewWindow(url_link) {
+    const url = url_link;
     window.open(url, "_blank");
 }
 

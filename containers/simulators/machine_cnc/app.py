@@ -18,7 +18,8 @@ from kafka import KafkaProducer
 from flask import Flask, request
 
 app = Flask(__name__)
-RUNNING = False
+RUNNING: bool = False
+OBJ_ID: int = 0
 
 # Producer for Machine Assembly Robot
 producer = KafkaProducer(bootstrap_servers=["kafka:9092"])
@@ -55,13 +56,13 @@ def task(params: dict) -> None:
         None
     """
     # Counter for obj_id
-    obj_id: int = 0
+    global OBJ_ID
 
     # Generate data while RUNNING
     while RUNNING:
         # Create data
         data = data_cnc_machine(
-            obj_id=obj_id,
+            obj_id=OBJ_ID,
             params=params
         )
         print(f"RUNNING task CNC... with data: {data}", flush=True)
@@ -93,7 +94,7 @@ def task(params: dict) -> None:
         # Notify frontend that machine produced a part
         # requests.post("http://frontend:5000/notify/cnc", timeout=10)
 
-        obj_id += 1
+        OBJ_ID += 1
 
 @app.route('/start', methods=['POST'])
 def start() -> str:
