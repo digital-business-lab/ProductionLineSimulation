@@ -1,0 +1,32 @@
+* {
+    margin: 0;
+    padding: 0;
+    background-color: aliceblue;
+}
+
+h1 {
+    font-size: 30px;
+}
+
+.Main-Container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1%;
+    width: 100vw;
+    height: 100vh;
+}
+
+.Main-Container-CNC,
+.Main-Container-AR,
+.Main-Container-Packaging {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-right: dashed;
+    border-left: dashed;
+    gap: 15%;
+}
+
+.graph {
+    width: 100%;
+}

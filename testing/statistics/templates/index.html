@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Live Factory Stats</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+</head>
+<body>
+    <main class="Main-Container">
+        <section class="Main-Container-CNC">
+            <h1>CNC Statistics</h1>
+            <canvas id="cncChart1"></canvas>
+            <canvas id="cncChart2"></canvas>
+        </section>
+
+        <section class="Main-Container-AR">
+            <h1>Assembly Robot Statistics</h1>
+            <canvas id="arChart1"></canvas>
+            <canvas id="arChart2"></canvas>
+        </section>
+
+        <section class="Main-Container-Packaging">
+            <h1>Packaging Statistics</h1>
+            <canvas id="packChart1"></canvas>
+            <canvas id="packChart2"></canvas>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='scripts/script.js') }}"></script>
+</body>
+</html>
